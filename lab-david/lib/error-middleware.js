@@ -8,7 +8,7 @@ module.exports = (error,request,response,next) => {
   logger.log('info', error);
 
   if(error.status){
-    logger.log('info', `respoding with a ${error.status} status and a message : ${error.message}`);
+    logger.log('info', `responding with a ${error.status} status and a message : ${error.message}`);
     return response.sendStatus(error.status);
   }
 
