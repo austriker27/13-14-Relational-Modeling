@@ -5,49 +5,49 @@ process.env.MONGODB_URI = 'mongodb://localhost/testing';
 
 const faker = require('faker');
 const superagent = require('superagent');
-const Mountain = require('../model/mountain');
+const Resume = require('../model/resume');
 const server = require('../lib/server');
 
-const apiURL = `http://localhost:${process.env.PORT}/api/mountains`;
+const apiURL = `http://localhost:${process.env.PORT}/api/resumes`;
 
-const mountainMockupCreator = () => {
-  return new Mountain({
+const resumeMockupCreator = () => {
+  return new Resume({
     name : faker.address.county(2),
     state  : faker.address.state(1),
     range : faker.address.county(2),
   }).save();
 };
 
-describe('/api/mountains', () => {
+describe('/api/resumes', () => {
   beforeAll(server.start);
   afterAll(server.stop);
-  afterEach(() => Mountain.remove({}));
+  afterEach(() => Resume.remove({}));
 
-  describe('POST /api/mountains', () => {
-    test('should respond with a mountain and a 200 status code if there is no error', () => {
-      let mountainToPost = {
+  describe('POST /api/resumes', () => {
+    test('should respond with a resume and a 200 status code if there is no error', () => {
+      let resumeToPost = {
         name : faker.address.county(2),
         state : faker.address.state(1),
         range : faker.address.county(2),
       };
       return superagent.post(`${apiURL}`)
-        .send(mountainToPost)
+        .send(resumeToPost)
         .then(response => {
           expect(response.status).toEqual(200);
           expect(response.body._id).toBeTruthy();
           expect(response.body.timestamp).toBeTruthy();
 
-          expect(response.body.name).toEqual(mountainToPost.name);
-          expect(response.body.state).toEqual(mountainToPost.state);
-          expect(response.body.range).toEqual(mountainToPost.range);
+          expect(response.body.name).toEqual(resumeToPost.name);
+          expect(response.body.state).toEqual(resumeToPost.state);
+          expect(response.body.range).toEqual(resumeToPost.range);
         });
     });
-    test('should respond with a 400 code if we send an incomplete mountain', () => {
-      let mountainToPost = {
+    test('should respond with a 400 code if we send an incomplete resume', () => {
+      let resumeToPost = {
         name : faker.company.bsNoun(2),
       };
       return superagent.post(`${apiURL}`)
-        .send(mountainToPost)
+        .send(resumeToPost)
         .then(Promise.reject)
         .catch(response => {
           expect(response.status).toEqual(400);
@@ -55,11 +55,11 @@ describe('/api/mountains', () => {
     });
   });
 
-  describe('DELETE /api/mountains/:id', () => {
+  describe('DELETE /api/resumes/:id', () => {
     test('should respond with a 204 if there are no errors', () => {
-      return mountainMockupCreator()
-        .then(mountain => {
-          return superagent.delete(`${apiURL}/${mountain._id}`);
+      return resumeMockupCreator()
+        .then(resume => {
+          return superagent.delete(`${apiURL}/${resume._id}`);
         })
         .then(response => {
           expect(response.status).toEqual(204);
@@ -75,45 +75,45 @@ describe('/api/mountains', () => {
     });
   });
 
-  describe('PUT /api/mountains', () => {
-    test('PUT should update mountain and respond with a 200 if there are no errors', () => {
+  describe('PUT /api/resumes', () => {
+    test('PUT should update resume and respond with a 200 if there are no errors', () => {
 
-      let mountainToUpdate = null;
+      let resumeToUpdate = null;
 
-      return mountainMockupCreator()
-        .then(mountain => {
-          mountainToUpdate = mountain;
-          return superagent.put(`${apiURL}/${mountain._id}`)
-            .send({name : 'Kilimanjaro'});
+      return resumeMockupCreator()
+        .then(resume => {
+          resumeToUpdate = resume;
+          return superagent.put(`${apiURL}/${resume._id}`)
+            .send({name : 'SuperResume'});
         })
         .then(response => {
           expect(response.status).toEqual(200);
           console.log(response.body);
-          expect(response.body.name).toEqual('Kilimanjaro');
-          expect(response.body.state).toEqual(mountainToUpdate.state);          
-          expect(response.body._id).toEqual(mountainToUpdate._id.toString());
+          expect(response.body.name).toEqual('SuperResume');
+          expect(response.body.state).toEqual(resumeToUpdate.state);          
+          expect(response.body._id).toEqual(resumeToUpdate._id.toString());
         });
     });
   });
 
-  describe('GET /api/mountains', () => {
+  describe('GET /api/resumes', () => {
     test('GET should respond with a 200 status code if there is no error', () => {
-      let mountainToTest = null;
+      let resumeToTest = null;
 
-      mountainMockupCreator()
-        .then(mountain => {
-          mountainToTest = mountain;
-          return superagent.get(`${apiURL}/${mountain._id}`);
+      resumeMockupCreator()
+        .then(resume => {
+          resumeToTest = resume;
+          return superagent.get(`${apiURL}/${resume._id}`);
         })
         .then(response => {
           expect(response.status).toEqual(200);
 
-          expect(response.body._id).toEqual(mountainToTest._id.toString());
+          expect(response.body._id).toEqual(resumeToTest._id.toString());
           expect(response.body.timestamp).toBeTruthy();
 
-          expect(response.body.name).toEqual(mountainToTest.name);
-          expect(response.body.state).toEqual(mountainToTest.state);
-          expect(response.body.range).toEqual(mountainToTest.range);
+          expect(response.body.name).toEqual(resumeToTest.name);
+          expect(response.body.state).toEqual(resumeToTest.state);
+          expect(response.body.range).toEqual(resumeToTest.range);
           
         });
     });
