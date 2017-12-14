@@ -2,14 +2,8 @@
 
 const mongoose = require('mongoose');
 
+
 const resumeSchema = mongoose.Schema({
-  project : {
-    type : String,
-    required : true,
-    unique : true,
-    name : String,
-    age : Number,
-  },
   name : {
     type : String,
     required : true,
@@ -17,10 +11,13 @@ const resumeSchema = mongoose.Schema({
   age : {
     type : Number,
   },
-  timestamp : {
-    type : Date,
-    default : () => new Date(),
+  timeStamp : {type : Date,
+    default : () => new Date() 
   },
+  projects : [{type: mongoose.Schema.Types.ObjectId,
+    ref : 'project'}],
+},{
+  usePushEach : true,
 });
 
 module.exports = mongoose.model('resume', resumeSchema);
