@@ -53,6 +53,16 @@ describe('/api/resumes', () => {
           expect(response.status).toEqual(400);
         });
     });
+    test('should respond with a 409 code if we send a resume with a project property, which is a unique property, that already exists', () => {
+      return resumeMockupCreator()
+        .then(resume => {
+          return superagent.post(`${resume.body.project}`);
+        })
+        .then(Promise.reject)
+        .catch(response => {
+          expect(response.status).toEqual(409);
+        });
+    });
   });
 
   describe('DELETE /api/resumes/:id', () => {
@@ -92,6 +102,16 @@ describe('/api/resumes', () => {
           expect(response.body.project).toEqual('GhosTown');
           expect(response.body.name).toEqual(resumeToUpdate.name);          
           expect(response.body._id).toEqual(resumeToUpdate._id.toString());
+        });
+    });
+    test('PUT should respond with a 409 code if we send a resume with a project property, which is a unique property, that already exists', () => {
+      return resumeMockupCreator()
+        .then(resume => {
+          return superagent.post(`${resume.body.project}`);
+        })
+        .then(Promise.reject)
+        .catch(response => {
+          expect(response.status).toEqual(409);
         });
     });
   });

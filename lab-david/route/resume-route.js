@@ -66,31 +66,31 @@ resumeRoute.get('/api/resumes/', (request,response) => {
     });
 });
 
-resumeRoute.delete('/api/resumes/:id', (request,response) => {
-  logger.log('info', 'DELETE - processing a delete request for a specific id');
+// resumeRoute.delete('/api/resumes/:id', (request,response) => {
+//   logger.log('info', 'DELETE - processing a delete request for a specific id');
 
-  Resume.findById(request.params.id)
-    .then(resume => {
-      if(!resume){
-        logger.log('info', 'DELETE - returning a 404 status code');
-        return response.sendStatus(404);
-      }
-      logger.log('info', 'DELETE - returning a 200 status code');
-      logger.log('info',resume);
+//   Resume.findById(request.params.id)
+//     .then(resume => {
+//       if(!resume){
+//         logger.log('info', 'DELETE - returning a 404 status code');
+//         return response.sendStatus(404);
+//       }
+//       logger.log('info', 'DELETE - returning a 200 status code');
+//       logger.log('info',resume);
 
-      response.json(resume).delete();
-      return response.json(resume);
+//       response.json(resume).delete();
+//       return response.json(resume);
 
-    }).catch(error => {
-      if(error.message.indexOf('Cast to ObjectId failed') > -1){
-        logger.log('info', 'DELETE - returning a 404 status code. could not parse the id');
-        return response.sendStatus(404);
-      }
-      logger.log('error', 'DELETE - returning a 500 code');
-      logger.log('error', error);
-      return response.sendStatus(500);
-    });
-});
+//     }).catch(error => {
+//       if(error.message.indexOf('Cast to ObjectId failed') > -1){
+//         logger.log('info', 'DELETE - returning a 404 status code. could not parse the id');
+//         return response.sendStatus(404);
+//       }
+//       logger.log('error', 'DELETE - returning a 500 code');
+//       logger.log('error', error);
+//       return response.sendStatus(500);
+//     });
+// });
 
 resumeRoute.put('/api/resumes/:id', jsonParser,(request,response,next) => {
   let options = {runValidators: true, new : true};
