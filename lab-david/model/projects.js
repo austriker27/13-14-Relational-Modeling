@@ -7,10 +7,16 @@ const projectSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  year : [{type : mongoose.Schema.TypesObjectId,
+  year : {type : Number},
+
+  languages : [{type : String }],
+
+  description : {type : String},
+   
+  resumes : [{type: mongoose.Schema.Types.ObjectId,
     ref : 'resume'}],
 },{
   usePushEach : true,
 });
 
-module.exports = mongoose.model('resume',projectSchema);
+module.exports = mongoose.model('project',projectSchema);
