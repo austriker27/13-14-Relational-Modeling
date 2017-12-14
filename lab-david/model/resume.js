@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const resumeSchema = mongoose.Schema({
   project : {
+    type : String,
     required : true,
     unique : true,
     name : String,
@@ -15,6 +16,10 @@ const resumeSchema = mongoose.Schema({
   },
   age : {
     type : Number,
+  },
+  timestamp : {
+    type : Date,
+    default : () => new Date(),
   },
 });
 
