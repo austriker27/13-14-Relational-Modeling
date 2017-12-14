@@ -56,7 +56,12 @@ describe('/api/resumes', () => {
     test('should respond with a 409 code if we send a resume with a project property, which is a unique property, that already exists', () => {
       return resumeMockupCreator()
         .then(resume => {
-          return superagent.post(`${resume.body.project}`);
+          return superagent.post(apiURL)
+            .send({
+              project : resume.project,
+              name : resume.name,
+              age : resume.age,
+            });
         })
         .then(Promise.reject)
         .catch(response => {
@@ -64,6 +69,7 @@ describe('/api/resumes', () => {
         });
     });
   });
+    
 
   describe('DELETE /api/resumes/:id', () => {
     test('should respond with a 204 if there are no errors', () => {
