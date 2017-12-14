@@ -3,39 +3,39 @@
 const {Router} = require('express');
 const jsonParser = require('body-parser').json();
 
-const Project = require('../model/project');
+const Resume = require('../model/resume');
 const logger = require('../lib/logger');
 const httpErrors = require('http-errors');
 
-const projectRoute = module.exports = new Router();
+const resumeRoute = module.exports = new Router();
 
-projectRoute.post('/api/projects', jsonParser, (request,response,next) => {
-  if(!request.body.title || !request.body.language || !request.body.year) {
-    return next(httpErrors(400, 'title, language and year are required things' ));
+resumeRoute.post('/api/resumes', jsonParser, (request,response,next) => {
+  if(!request.body.project || !request.body.name || !request.body.age) {
+    return next(httpErrors(400, 'project, name and age are required things' ));
   }
 
-  return new Project(request.body).save()
-    .then(project => {
-      return response.json(project);
+  return new Resume(request.body).save()
+    .then(resume => {
+      return response.json(resume);
     })
     .catch(next);
 });
 
-projectRoute.get('/api/projects/:id', (request,response,next) => {
-  return Project.findById(request.params.id)
-    .then(project => {
-      if(!project){
-        throw httpErrors(404,`project not found`);
+resumeRoute.get('/api/resumes/:id', (request,response,next) => {
+  return Resume.findById(request.params.id)
+    .then(resume => {
+      if(!resume){
+        throw httpErrors(404,`resume not found`);
       }
       logger.log('info', 'GET - returning a 200 status code');
-      return response.json(project);
+      return response.json(resume);
     }).catch(next);
 });
 
-projectRoute.delete('/api/projects/:id',(request,response,next) => {
-  return Project.findByIdAndRemove(request.params.id)
-    .then(project => {
-      if(!project){
+resumeRoute.delete('/api/resumes/:id',(request,response,next) => {
+  return Resume.findByIdAndRemove(request.params.id)
+    .then(resume => {
+      if(!resume){
         throw httpErrors(404,`project was not found. go back to start, do not collect $200.`);
       }
       logger.log('info', `GET - returning a 204 status code`);
@@ -43,18 +43,18 @@ projectRoute.delete('/api/projects/:id',(request,response,next) => {
     }).catch(next);
 });
 
-projectRoute.get('/api/projects/', (request,response) => {
+resumeRoute.get('/api/resumes/', (request,response) => {
   logger.log('info', 'GET - processing for a non-ID specific request');
 
-  Project.find({})
-    .then(project => {
-      if(!project){
+  Resume.find({})
+    .then(resume => {
+      if(!resume){
         logger.log('info', 'GET - returning a 404 status code');
         return response.sendStatus(404);
       }
       logger.log('info', 'GET - returning a 200 status code');
-      logger.log('info',project);
-      return response.json(project);
+      logger.log('info',resume);
+      return response.json(resume);
     }).catch(error => {
       if(error.message.indexOf('Cast to ObjectId failed') > -1){
         logger.log('info', 'GET - returning a 404 status code. could not parse the id');
@@ -66,20 +66,20 @@ projectRoute.get('/api/projects/', (request,response) => {
     });
 });
 
-projectRoute.delete('/api/projects/:id', (request,response) => {
+resumeRoute.delete('/api/resumes/:id', (request,response) => {
   logger.log('info', 'DELETE - processing a delete request for a specific id');
 
-  Project.findById(request.params.id)
-    .then(project => {
-      if(!project){
+  Resume.findById(request.params.id)
+    .then(resume => {
+      if(!resume){
         logger.log('info', 'DELETE - returning a 404 status code');
         return response.sendStatus(404);
       }
       logger.log('info', 'DELETE - returning a 200 status code');
-      logger.log('info',project);
+      logger.log('info',resume);
 
-      response.json(project).delete();
-      return response.json(project);
+      response.json(resume).delete();
+      return response.json(resume);
 
     }).catch(error => {
       if(error.message.indexOf('Cast to ObjectId failed') > -1){
@@ -92,15 +92,15 @@ projectRoute.delete('/api/projects/:id', (request,response) => {
     });
 });
 
-projectRoute.put('/api/projects/:id', jsonParser,(request,response,next) => {
+resumeRoute.put('/api/resumes/:id', jsonParser,(request,response,next) => {
   let options = {runValidators: true, new : true};
 
-  return Project.findByIdAndUpdate(request.params.id,request.body,options)
-    .then(project => {
-      if(!project){
-        throw httpErrors(404, 'project was not found');
+  return Resume.findByIdAndUpdate(request.params.id,request.body,options)
+    .then(resume => {
+      if(!resume){
+        throw httpErrors(404, 'resume was not found');
       }
       logger.log('info', 'GET - returning a 200 status code');
-      return response.json(project);
+      return response.json(resume);
     }).catch(next);
 });
