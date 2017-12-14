@@ -7,6 +7,7 @@ const resumeSchema = mongoose.Schema({
     required : true,
     unique : true,
     name : String,
+    age : Number,
   },
   name : {
     type : String,

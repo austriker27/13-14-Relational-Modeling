@@ -12,9 +12,9 @@ const apiURL = `http://localhost:${process.env.PORT}/api/resumes`;
 
 const resumeMockupCreator = () => {
   return new Resume({
-    name : faker.address.county(2),
-    state  : faker.address.state(1),
-    range : faker.address.county(2),
+    project : faker.company.bsNoun(2),
+    name  : faker.internet.userName(1),
+    age : faker.random.number(1),
   }).save();
 };
 
@@ -26,9 +26,9 @@ describe('/api/resumes', () => {
   describe('POST /api/resumes', () => {
     test('should respond with a resume and a 200 status code if there is no error', () => {
       let resumeToPost = {
-        name : faker.address.county(2),
-        state : faker.address.state(1),
-        range : faker.address.county(2),
+        project : faker.company.bsNoun(2),
+        name  : faker.internet.userName(1),
+        age : faker.random.number(1),
       };
       return superagent.post(`${apiURL}`)
         .send(resumeToPost)
@@ -37,9 +37,9 @@ describe('/api/resumes', () => {
           expect(response.body._id).toBeTruthy();
           expect(response.body.timestamp).toBeTruthy();
 
+          expect(response.body.project).toEqual(resumeToPost.project);
           expect(response.body.name).toEqual(resumeToPost.name);
-          expect(response.body.state).toEqual(resumeToPost.state);
-          expect(response.body.range).toEqual(resumeToPost.range);
+          expect(response.body.age).toEqual(resumeToPost.age);
         });
     });
     test('should respond with a 400 code if we send an incomplete resume', () => {
@@ -84,13 +84,13 @@ describe('/api/resumes', () => {
         .then(resume => {
           resumeToUpdate = resume;
           return superagent.put(`${apiURL}/${resume._id}`)
-            .send({name : 'SuperResume'});
+            .send({project : 'GhosTown'});
         })
         .then(response => {
           expect(response.status).toEqual(200);
           console.log(response.body);
-          expect(response.body.name).toEqual('SuperResume');
-          expect(response.body.state).toEqual(resumeToUpdate.state);          
+          expect(response.body.project).toEqual('GhosTown');
+          expect(response.body.name).toEqual(resumeToUpdate.name);          
           expect(response.body._id).toEqual(resumeToUpdate._id.toString());
         });
     });
@@ -111,9 +111,9 @@ describe('/api/resumes', () => {
           expect(response.body._id).toEqual(resumeToTest._id.toString());
           expect(response.body.timestamp).toBeTruthy();
 
+          expect(response.body.project).toEqual(resumeToTest.project);
           expect(response.body.name).toEqual(resumeToTest.name);
-          expect(response.body.state).toEqual(resumeToTest.state);
-          expect(response.body.range).toEqual(resumeToTest.range);
+          expect(response.body.age).toEqual(resumeToTest.age);
           
         });
     });
