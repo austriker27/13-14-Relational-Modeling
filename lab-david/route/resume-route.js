@@ -15,10 +15,7 @@ resumeRoute.post('/api/resumes', jsonParser, (request,response,next) => {
       if(!request.body.project || !request.body.name || !request.body.age) {
         return next(httpErrors(400, 'project, name and age are required things' ));
       }
-      if(!request.params.project === `${response.body.project}`) {
-        return next(httpErrors(409, 'the project must be unique' ));
-      }
-      
+    
       return response.json(resume);
     })
     .catch(next);
@@ -102,10 +99,8 @@ resumeRoute.put('/api/resumes/:id', jsonParser,(request,response,next) => {
     .then(resume => {
       if(!resume){
         throw httpErrors(404, 'resume was not found');
-      }
-      if(request.params.project === resume.project){
-        throw httpErrors(409, 'project in the resume is a duplicate.');        
-      }
+      }    
+      
       logger.log('info', 'GET - returning a 200 status code');
       return response.json(resume);
     }).catch(next);
