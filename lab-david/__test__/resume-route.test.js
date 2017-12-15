@@ -1,50 +1,36 @@
 'use strict';
 
-const faker = require('faker');
+require('./lib/setup');
+
 const superagent = require('superagent');
-const Resume = require('../model/resume');
+const resumeMock = require('../model/resume-mock');
 const server = require('../lib/server');
 
 const apiURL = `http://localhost:${process.env.PORT}/api/resumes`;
 
-const resumeMockupCreator = () => {
-  return new Resume({
-    project : faker.company.bsNoun(2),
-    name  : faker.internet.userName(1),
-    age : faker.random.number(1),
-  }).save();
-};
-
 describe('/api/resumes', () => {
   beforeAll(server.start);
   afterAll(server.stop);
-  afterEach(() => Resume.remove({}));
+  afterEach(resumeMock.remove);
 
   describe('POST /api/resumes', () => {
     test('should respond with a resume and a 200 status code if there is no error', () => {
-      let resumeToPost = {
-        project : faker.company.bsNoun(2),
-        name  : faker.internet.userName(1),
-        age : faker.random.number(1),
-      };
-      return superagent.post(`${apiURL}`)
-        .send(resumeToPost)
+      return superagent.post(apiURL)
+        .send({
+          name : 'zaphod',
+          age : '30',
+        })
         .then(response => {
           expect(response.status).toEqual(200);
-          expect(response.body._id).toBeTruthy();
-          expect(response.body.timestamp).toBeTruthy();
-
-          expect(response.body.project).toEqual(resumeToPost.project);
-          expect(response.body.name).toEqual(resumeToPost.name);
-          expect(response.body.age).toEqual(resumeToPost.age);
+          expect(response.body.name).toEqual('zaphod');
         });
     });
+
     test('should respond with a 400 code if we send an incomplete resume', () => {
-      let resumeToPost = {
-        name : faker.company.bsNoun(2),
-      };
-      return superagent.post(`${apiURL}`)
-        .send(resumeToPost)
+      return superagent.post(apiURL)
+        .send({
+          name : 'zaphod',
+        })
         .then(Promise.reject)
         .catch(response => {
           expect(response.status).toEqual(400);
@@ -52,7 +38,7 @@ describe('/api/resumes', () => {
     });
 
     test('should respond with a 409 code if we send a resume with a project property, which is a unique property, that already exists', () => {
-      return resumeMockupCreator()
+      return resumeMock.create()
         .then(resume => {
           return superagent.post(apiURL)
             .send({
@@ -71,7 +57,7 @@ describe('/api/resumes', () => {
 
   describe('DELETE /api/resumes/:id', () => {
     test('should respond with a 204 if there are no errors', () => {
-      return resumeMockupCreator()
+      return resumeMock.create()
         .then(resume => {
           return superagent.delete(`${apiURL}/${resume._id}`);
         })
@@ -94,7 +80,7 @@ describe('/api/resumes', () => {
 
       let resumeToUpdate = null;
 
-      return resumeMockupCreator()
+      return resumeMock.create()
         .then(resume => {
           resumeToUpdate = resume;
           return superagent.put(`${apiURL}/${resume._id}`)
@@ -132,7 +118,7 @@ describe('/api/resumes', () => {
     test('GET should respond with a 200 status code if there is no error', () => {
       let resumeToTest = null;
 
-      resumeMockupCreator()
+      return resumeMock.create()
         .then(resume => {
           resumeToTest = resume;
           return superagent.get(`${apiURL}/${resume._id}`);
@@ -140,13 +126,8 @@ describe('/api/resumes', () => {
         .then(response => {
           expect(response.status).toEqual(200);
 
-          expect(response.body._id).toEqual(resumeToTest._id.toString());
-          expect(response.body.timestamp).toBeTruthy();
-
-          expect(response.body.project).toEqual(resumeToTest.project);
-          expect(response.body.name).toEqual(resumeToTest.name);
-          expect(response.body.age).toEqual(resumeToTest.age);
-          
+          expect(JSON.stringify(response.body.name))
+            .toEqual(JSON.stringify(resumeToTest.name));
         });
     });
     test('should respond with a 404 status code if the id is incorrect', () => {
