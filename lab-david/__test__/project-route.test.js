@@ -101,7 +101,7 @@ describe('/api/resumes', () => {
       return projectMock.create()
         .then(mock => {
           tempMock = mock;
-          return superagent.get(`${apiURL}/${mock.project._id}`);
+          return superagent.get(`${apiURL}/${mock.resume._id}`);
         })
         .then(response => {
           console.log(response.body);
