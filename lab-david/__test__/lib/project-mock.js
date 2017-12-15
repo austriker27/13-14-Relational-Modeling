@@ -14,7 +14,7 @@ projectMock.create = () => {
       mock.resume = resume;
 
       return new Project({
-        title : faker.bsNoun(2),
+        title : faker.company.bsNoun(2),
         year : faker.date.soon,
       
         languages : faker.database.engine(3).split(' '),

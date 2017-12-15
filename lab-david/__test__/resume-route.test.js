@@ -3,7 +3,7 @@
 require('./lib/setup');
 
 const superagent = require('superagent');
-const resumeMock = require('../model/resume-mock');
+const resumeMock = require('./lib/resume-mock');
 const server = require('../lib/server');
 
 const apiURL = `http://localhost:${process.env.PORT}/api/resumes`;

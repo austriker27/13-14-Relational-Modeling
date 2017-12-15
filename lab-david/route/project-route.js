@@ -3,7 +3,7 @@
 const {Router} = require('express');
 const jsonParser = require('body-parser').json();
 const Project = require('../model/project');
-const logger = require('..lib/logger');
+const logger = require('../lib/logger');
 const httpErrors = require('http-errors');
 
 const projectRoute = module.exports = new Router();
