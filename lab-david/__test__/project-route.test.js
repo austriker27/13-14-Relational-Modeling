@@ -9,9 +9,9 @@ const server = require('../lib/server');
 const projectMock = require('./lib/project-mock');
 const resumeMock = require('./lib/resume-mock');
 
-const apiURL = `http://localhost:${process.env.PORT}/api/resumes`;
+const apiURL = `http://localhost:${process.env.PORT}/api/projects`;
 
-describe('/api/resumes', () => {
+describe('/api/projects', () => {
   beforeAll(server.start);
   afterAll(server.stop);
   afterEach(projectMock.remove);
@@ -25,7 +25,7 @@ describe('/api/resumes', () => {
 
           let projectToPost = {
             title : faker.company.bsNoun(2),
-            year : faker.date.soon,
+            year : 2017,
             languages : faker.database.engine(3).split(' '),
             description : faker.company.catchPhrase(10).split(' '),
             resume : mock._id,
@@ -35,9 +35,7 @@ describe('/api/resumes', () => {
             .then(response => {
               expect(response.status).toEqual(200);
               expect(response.body._id).toBeTruthy();
-              expect(response.body.timestamp).toBeTruthy();
-              expect(response.body.resume).toEqual(tempResumeMock._id.toString());
-
+              // expect(response.body.resume).toEqual(tempResumeMock._id.toString());
               expect(response.body.name).toEqual(projectToPost.name);
               expect(response.body.year).toEqual(projectToPost.year);
             });

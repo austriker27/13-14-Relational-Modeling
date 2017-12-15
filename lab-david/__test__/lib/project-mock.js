@@ -15,9 +15,9 @@ projectMock.create = () => {
 
       return new Project({
         title : faker.company.bsNoun(2),
-        year : '2017',
+        year : 2017,
       
-        languages : faker.database.engine(3).split(' '),
+        languages : faker.database.engine(3),
       
         description : faker.company.catchPhrase(10).split(' '),
         resume : resume._id,

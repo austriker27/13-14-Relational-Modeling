@@ -28,7 +28,7 @@ describe('/api/resumes', () => {
 
     test('should respond with a 400 code if we send an incomplete resume', () => {
       let resumeToPost = {
-        name : 'zaphod',
+        age : '50',
       };
       return superagent.post(`${apiURL}`)
         // .send({
@@ -49,6 +49,7 @@ describe('/api/resumes', () => {
               project : resume.project,
               name : resume.name,
               age : resume.age,
+              _id : resume._id,
             });
         })
         .then(Promise.reject)
@@ -85,14 +86,13 @@ describe('/api/resumes', () => {
       let resumeToUpdate = null;
 
       return resumeMock.create()
-        .then(mock => {
-          resumeToUpdate = mock.resume;
-          return superagent.put(`${apiURL}/${mock.resume._id}`)
+        .then(resume => {
+          resumeToUpdate = resume;
+          return superagent.put(`${apiURL}/${resume._id}`)
             .send({name : 'Zaphod'});
         })
         .then(response => {
           expect(response.status).toEqual(200);
-          expect(response.body.project).toEqual('Zaphod');
           expect(response.body.name).toEqual(resumeToUpdate.name);          
           expect(response.body._id).toEqual(resumeToUpdate._id.toString());
         });
