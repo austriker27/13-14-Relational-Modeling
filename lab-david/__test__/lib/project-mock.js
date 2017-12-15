@@ -25,7 +25,7 @@ projectMock.create = () => {
     })
     .then(project => {
       mock.project = project;
-      return project;
+      return mock;
     });
 };
 
