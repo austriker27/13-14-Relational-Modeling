@@ -92,7 +92,6 @@ describe('/api/resumes', () => {
         })
         .then(response => {
           expect(response.status).toEqual(200);
-          console.log(response.body);
           expect(response.body.project).toEqual('Zaphod');
           expect(response.body.name).toEqual(resumeToUpdate.name);          
           expect(response.body._id).toEqual(resumeToUpdate._id.toString());

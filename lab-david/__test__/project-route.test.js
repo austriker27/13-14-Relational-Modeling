@@ -94,7 +94,7 @@ describe('/api/resumes', () => {
   });
 
   describe('GET /api/projects/:id', () => {
-    test.only('should respond with a 200 status if there is no error', () => {
+    test('should respond with a 200 status if there is no error', () => {
       
       let tempMock = null;
 
