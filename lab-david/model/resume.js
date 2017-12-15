@@ -12,8 +12,7 @@ const resumeSchema = mongoose.Schema({
     type : Number,
   },
   timeStamp : {type : Date,
-    default : () => new Date() 
-  },
+    default : () => new Date() },
   projects : [{type: mongoose.Schema.Types.ObjectId,
     ref : 'project'}],
 },{
