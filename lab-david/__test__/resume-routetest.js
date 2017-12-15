@@ -13,7 +13,7 @@ describe('/api/resumes', () => {
   afterAll(server.stop);
   afterEach(resumeMock.remove);
 
-  describe('POST /api/resumes', () => {
+  describe('POST /resumes', () => {
     test('should respond with a resume and a 200 status code if there is no error', () => {
       return superagent.post(apiURL)
         .send({
@@ -27,10 +27,14 @@ describe('/api/resumes', () => {
     });
 
     test('should respond with a 400 code if we send an incomplete resume', () => {
-      return superagent.post(apiURL)
-        .send({
-          name : 'zaphod',
-        })
+      let resumeToPost = {
+        name : 'zaphod',
+      };
+      return superagent.post(`${apiURL}`)
+        // .send({
+        //   name : 'zaphod',
+        // })
+        .send(resumeToPost)
         .then(Promise.reject)
         .catch(response => {
           expect(response.status).toEqual(400);
@@ -55,7 +59,7 @@ describe('/api/resumes', () => {
   });
     
 
-  describe('DELETE /api/resumes/:id', () => {
+  describe('DELETE /resumes/:id', () => {
     test('should respond with a 204 if there are no errors', () => {
       return resumeMock.create()
         .then(resume => {
@@ -75,7 +79,7 @@ describe('/api/resumes', () => {
     });
   });
 
-  describe('PUT /api/resumes', () => {
+  describe('PUT /resumes', () => {
     test('PUT should update resume and respond with a 200 if there are no errors', () => {
 
       let resumeToUpdate = null;
@@ -114,7 +118,7 @@ describe('/api/resumes', () => {
 
   });
 
-  describe('GET /api/resumes', () => {
+  describe('GET /resumes', () => {
     test('GET should respond with a 200 status code if there is no error', () => {
       let resumeToTest = null;
 

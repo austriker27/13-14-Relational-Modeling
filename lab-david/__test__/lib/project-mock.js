@@ -15,7 +15,7 @@ projectMock.create = () => {
 
       return new Project({
         title : faker.company.bsNoun(2),
-        year : faker.date.soon,
+        year : '2017',
       
         languages : faker.database.engine(3).split(' '),
       
@@ -40,7 +40,7 @@ projectMock.createMany = (creationCount) => {
         .fill(0)
         .map(() => {
           return new Project({
-            title : faker.bsNoun(2),
+            title : faker.company.bsNoun(2),
             year : faker.date.soon,
             
             languages : faker.database.engine(3).split(' '),

@@ -14,7 +14,7 @@ const apiURL = `http://localhost:${process.env.PORT}/api/resumes`;
 describe('/api/resumes', () => {
   beforeAll(server.start);
   afterAll(server.stop);
-  afterEach(resumeMock.remove);
+  afterEach(projectMock.remove);
 
   describe('POST /api/projects', () => {
     test('should respond with a project and a 200 status code if there is no error', () => {
@@ -24,7 +24,7 @@ describe('/api/resumes', () => {
           tempResumeMock = mock;
 
           let projectToPost = {
-            title : faker.bsNoun(2),
+            title : faker.company.bsNoun(2),
             year : faker.date.soon,
             languages : faker.database.engine(3).split(' '),
             description : faker.company.catchPhrase(10).split(' '),
@@ -42,7 +42,7 @@ describe('/api/resumes', () => {
               expect(response.body.year).toEqual(projectToPost.year);
             });
         });
-    })
+    });
 
     test('should respond with a 404 if the resume id is not present', () => {
       return superagent.post(apiURL)
@@ -59,9 +59,10 @@ describe('/api/resumes', () => {
         });
     });
 
-    test('should respond with a 400 code if we send an incomplete test', () => {
+    test('should respond with a 400 code if we send an incomplete project', () => {
       let projectToPost = {
         title : faker.lorem.words(2),
+        year : faker.date.soon,        
       };
       return superagent.post(`${apiURL}`)
         .send(projectToPost)
@@ -76,7 +77,7 @@ describe('/api/resumes', () => {
     test('should respond with a 204 if there are no errors', () => {
       return projectMock.create()
         .then(mock => {
-          return superagent.delete(`${apiURL}/${mock.project._id}`);
+          return superagent.delete(`${apiURL}/${mock.id}`);
         })
         .then(response => {
           expect(response.status).toEqual(204);
@@ -93,7 +94,8 @@ describe('/api/resumes', () => {
   });
 
   describe('GET /api/projects/:id', () => {
-    test('should respond with a 200 status if there is no error', () => {
+    test.only('should respond with a 200 status if there is no error', () => {
+      
       let tempMock = null;
 
       return projectMock.create()

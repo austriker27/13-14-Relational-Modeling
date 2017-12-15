@@ -5,7 +5,8 @@ const Resume = require('./resume');
 const httpErrors = require('http-errors');
 
 const projectSchema = mongoose.Schema({
-  title : {type: String,
+  title : {
+    type: String,
     required: true,
     unique: true,
   },
@@ -38,7 +39,7 @@ projectSchema.pre('save', function(done){
     .catch(done);
 });
 
-projectSchema.post('remove', (document,done) => {
+projectSchema.post('remove', (document, done) => {
   return Resume.findById(document.resume)
     .then(resumeLocated => {
       if(!resumeLocated)
@@ -53,4 +54,4 @@ projectSchema.post('remove', (document,done) => {
     .catch(done);
 });
 
-module.exports = mongoose.model('project',projectSchema);
+module.exports = mongoose.model('project', projectSchema);
