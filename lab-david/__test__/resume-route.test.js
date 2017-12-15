@@ -93,7 +93,7 @@ describe('/api/resumes', () => {
         })
         .then(response => {
           expect(response.status).toEqual(200);
-          expect(response.body.name).toEqual(resumeToUpdate.name);          
+          expect(response.body.name).toEqual('Zaphod');          
           expect(response.body._id).toEqual(resumeToUpdate._id.toString());
         });
     });

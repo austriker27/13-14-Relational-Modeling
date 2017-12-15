@@ -75,7 +75,7 @@ describe('/api/projects', () => {
     test('should respond with a 204 if there are no errors', () => {
       return projectMock.create()
         .then(mock => {
-          return superagent.delete(`${apiURL}/${mock.id}`);
+          return superagent.delete(`${apiURL}/${mock.project._id}`);
         })
         .then(response => {
           expect(response.status).toEqual(204);
@@ -106,14 +106,13 @@ describe('/api/projects', () => {
           expect(response.status).toEqual(200);
 
           expect(response.body._id).toEqual(tempMock.project._id.toString());
-          expect(response.body.timestamp).toBeTruthy();
 
           expect(response.body.name).toEqual(tempMock.project.name);
           expect(response.body.year).toEqual(tempMock.project.year);
 
           expect(response.body.resume._id).toEqual(tempMock.resume._id.toString());
           expect(response.body.resume.age).toEqual(tempMock.resume.age);
-          expect(JSON.stringify(response.body.languages)).toEqual(JSON.stringify(tempMock.resume.languages));
+          expect(JSON.stringify(response.body.resume.languages)).toEqual(JSON.stringify(tempMock.resume.languages));
         });
     });
     test('should respond with a 404 status code if the id is incorrect', () => {
