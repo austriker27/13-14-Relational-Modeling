@@ -85,15 +85,15 @@ describe('/api/resumes', () => {
       let resumeToUpdate = null;
 
       return resumeMock.create()
-        .then(resume => {
-          resumeToUpdate = resume;
-          return superagent.put(`${apiURL}/${resume._id}`)
-            .send({project : 'GhosTown'});
+        .then(mock => {
+          resumeToUpdate = mock.resume;
+          return superagent.put(`${apiURL}/${mock.resume._id}`)
+            .send({name : 'Zaphod'});
         })
         .then(response => {
           expect(response.status).toEqual(200);
           console.log(response.body);
-          expect(response.body.project).toEqual('GhosTown');
+          expect(response.body.project).toEqual('Zaphod');
           expect(response.body.name).toEqual(resumeToUpdate.name);          
           expect(response.body._id).toEqual(resumeToUpdate._id.toString());
         });
