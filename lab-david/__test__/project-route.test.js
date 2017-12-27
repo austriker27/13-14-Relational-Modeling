@@ -35,7 +35,6 @@ describe('/api/projects', () => {
             .then(response => {
               expect(response.status).toEqual(200);
               expect(response.body._id).toBeTruthy();
-              // expect(response.body.resume).toEqual(tempResumeMock._id.toString());
               expect(response.body.name).toEqual(projectToPost.name);
               expect(response.body.year).toEqual(projectToPost.year);
             });
@@ -102,7 +101,6 @@ describe('/api/projects', () => {
           return superagent.get(`${apiURL}/${mock.project._id}`);
         })
         .then(response => {
-          console.log(response.body);
           expect(response.status).toEqual(200);
 
           expect(response.body._id).toEqual(tempMock.project._id.toString());

@@ -31,9 +31,6 @@ describe('/api/resumes', () => {
         age : '50',
       };
       return superagent.post(`${apiURL}`)
-        // .send({
-        //   name : 'zaphod',
-        // })
         .send(resumeToPost)
         .then(Promise.reject)
         .catch(response => {
@@ -97,24 +94,6 @@ describe('/api/resumes', () => {
           expect(response.body._id).toEqual(resumeToUpdate._id.toString());
         });
     });
-
-    // bonus points : 
-    // test('PUT should respond with a 409 code if we send a resume with a project property, which is a unique property, that already exists', () => {
-    //   return resumeMockupCreator()
-    //     .then(resume => {
-    //       return superagent.put(apiURL)
-    //         .send({
-    //           project : resume.project,
-    //           name : resume.name,
-    //           age : resume.age,
-    //         });
-    //     })
-    //     .then(Promise.reject)
-    //     .catch(response => {
-    //       expect(response.status).toEqual(409);
-    //     });
-    // });
-
   });
 
   describe('GET /api/resumes', () => {
