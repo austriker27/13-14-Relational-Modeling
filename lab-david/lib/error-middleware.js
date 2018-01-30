@@ -2,7 +2,7 @@
 
 const logger = require('./logger');
 
-module.exports = (error,request,response,next) => {
+module.exports = (error,request,response) => {
 
   logger.log('info', '__ERROR_MIDDLEWARE__');
   logger.log('info', error);
